@@ -1,0 +1,187 @@
+---
+---
+<header id="site-header">
+  <div class="container">
+    <a href="#hero" class="logo">brewhouse</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#service">Service</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact" class="nav-contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#service" class="mobile-link">Service</a></li>
+      <li><a href="#works" class="mobile-link">Works</a></li>
+      <li><a href="#blog" class="mobile-link">Blog</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #1a3020;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  header.scrolled {
+    background: #ffffff;
+    box-shadow: 0 1px 0 #d8e8d8;
+  }
+  header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    font-size: 15px;
+    letter-spacing: 0.35em;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  header.scrolled .logo {
+    color: #1a3020;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+  }
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 36px;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  header.scrolled .nav-links a {
+    color: #5a7a60;
+  }
+  .nav-links a:hover {
+    color: #ffffff;
+  }
+  header.scrolled .nav-links a:hover {
+    color: #1a3020;
+  }
+  .nav-contact {
+    color: rgba(255,255,255,0.9) !important;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  header.scrolled .nav-contact {
+    color: #2d6640 !important;
+  }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: rgba(255,255,255,0.8);
+    transition: background 0.3s;
+  }
+  header.scrolled .hamburger span {
+    background: #1a3020;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    background: #1a3020;
+    padding: 24px 0 32px;
+  }
+  header.scrolled .mobile-menu {
+    background: #ffffff;
+    border-top: 1px solid #d8e8d8;
+  }
+  .mobile-menu.open {
+    display: block;
+  }
+  .mobile-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 24px;
+  }
+  .mobile-link {
+    display: block;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  header.scrolled .mobile-link {
+    color: #5a7a60;
+    border-bottom-color: #e8ede8;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  // Scroll effect
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  });
+
+  // Hamburger toggle
+  hamburger?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('open');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.remove('open');
+    });
+  });
+</script>

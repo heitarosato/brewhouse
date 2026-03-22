@@ -1,0 +1,81 @@
+---
+import { services } from '../data/services';
+---
+<div class="section-divider"></div>
+<section id="service">
+  <div class="container">
+    <p class="section-tag">SERVICE</p>
+    <div class="service-list">
+      {services.map((svc) => (
+        <div class="svc-row">
+          <div class="svc-num serif">{svc.number}</div>
+          <div class="svc-title serif">{svc.title}</div>
+          <div class="svc-desc">{svc.description}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .service-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .svc-row {
+    display: grid;
+    grid-template-columns: 88px 220px 1fr;
+    gap: 0 32px;
+    align-items: start;
+    padding: 36px 0;
+    border-top: 1px solid #e8ede8;
+  }
+  .svc-row:last-child {
+    border-bottom: 1px solid #e8ede8;
+  }
+  .svc-num {
+    font-size: 56px;
+    font-weight: 200;
+    color: #d8e8d8;
+    line-height: 1;
+    padding-top: 4px;
+    white-space: pre-line;
+  }
+  .svc-title {
+    font-size: 14px;
+    font-weight: 300;
+    color: #1a3020;
+    line-height: 1.6;
+    padding-top: 8px;
+    white-space: pre-line;
+  }
+  .svc-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: #5a7a60;
+    line-height: 2.0;
+    padding-top: 8px;
+  }
+  @media (max-width: 768px) {
+    .svc-row {
+      grid-template-columns: 60px 1fr;
+      grid-template-rows: auto auto;
+      gap: 0 16px;
+    }
+    .svc-num {
+      font-size: 40px;
+      grid-row: 1;
+      grid-column: 1;
+    }
+    .svc-title {
+      grid-row: 1;
+      grid-column: 2;
+      padding-top: 4px;
+    }
+    .svc-desc {
+      grid-row: 2;
+      grid-column: 1 / -1;
+      padding-top: 12px;
+    }
+  }
+</style>

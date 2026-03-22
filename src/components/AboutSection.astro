@@ -1,0 +1,102 @@
+---
+---
+<div class="section-divider"></div>
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <!-- Left: concept -->
+      <div class="about-left">
+        <p class="section-tag">ABOUT</p>
+        <h2 class="about-catch serif">
+          食・ホスピタリティの可能性を<br>もっと深く、もっと先へ
+        </h2>
+        <p class="about-body">
+          brewhouseは、外食業界を中心に、食・ホスピタリティのテーマに特化したコンサルティング会社です。経営視点と現場知見とを武器に、業界の可能性をもっと深く、もっと先に広げていくことを目指しています。
+        </p>
+      </div>
+      <!-- Right: profile -->
+      <div class="about-right">
+        <p class="section-tag">PROFILE</p>
+        <div class="profile-photo-wrap">
+          <img
+            src="/profile.jpg"
+            alt="佐藤 平太郎"
+            class="profile-photo"
+            width="130"
+            height="170"
+            onerror="this.src='/profile.svg'"
+          />
+        </div>
+        <p class="profile-name serif">佐藤　平太郎</p>
+        <p class="profile-title">代表 / コンサルタント</p>
+        <p class="profile-bio">
+          戦略コンサルティングファーム、大手外食企業の経営企画部長などを経験し、食・ホスピタリティをテーマとするコンサルタントとして独立。外食企業を中心にホテル、リテール、消費財などのクライアントに対し、成長戦略策定、M&A、業態改革、海外事業などの経営アジェンダを支援。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .about-catch {
+    font-size: 26px;
+    font-weight: 200;
+    line-height: 1.7;
+    color: #1a3020;
+    margin-bottom: 28px;
+    letter-spacing: 0.03em;
+  }
+  .about-body {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 2.1;
+    color: #5a7a60;
+  }
+  .profile-photo-wrap {
+    margin-bottom: 20px;
+  }
+  .profile-photo {
+    width: 130px;
+    height: 170px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+  .profile-photo-placeholder {
+    width: 130px;
+    height: 170px;
+    background: #e8ede8;
+  }
+  .profile-name {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: #1a3020;
+    margin-bottom: 6px;
+  }
+  .profile-title {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: #9ab09a;
+    margin-bottom: 20px;
+  }
+  .profile-bio {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 2.1;
+    color: #5a7a60;
+  }
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 60px;
+    }
+  }
+</style>

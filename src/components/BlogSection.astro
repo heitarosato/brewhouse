@@ -1,0 +1,129 @@
+---
+// Fetch Note RSS at build time
+let posts: { date: string; title: string; link: string }[] = [];
+
+try {
+  const rssUrl = 'https://note.com/brewhouse/rss';
+  const res = await fetch(rssUrl);
+  if (res.ok) {
+    const xml = await res.text();
+    // Simple regex-based XML parse (no extra deps needed)
+    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+    posts = items.slice(0, 3).map((m) => {
+      const itemXml = m[1];
+      const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+                         itemXml.match(/<title>(.*?)<\/title>/);
+      const linkMatch = itemXml.match(/<link>(.*?)<\/link>/) ||
+                        itemXml.match(/<guid[^>]*>(.*?)<\/guid>/);
+      const pubDateMatch = itemXml.match(/<pubDate>(.*?)<\/pubDate>/);
+
+      const title = titleMatch?.[1]?.trim() ?? '';
+      const link = linkMatch?.[1]?.trim() ?? 'https://note.com/brewhouse';
+      const rawDate = pubDateMatch?.[1]?.trim() ?? '';
+      const date = rawDate
+        ? new Date(rawDate).toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }).replace(/\//g, '.')
+        : '';
+
+      return { date, title, link };
+    });
+  }
+} catch (e) {
+  // RSS fetch failed — show empty (static build: graceful fallback)
+  console.warn('Note RSS fetch failed:', e);
+}
+---
+<div class="section-divider"></div>
+<section id="blog">
+  <div class="container">
+    <p class="section-tag">BLOG</p>
+    {posts.length > 0 ? (
+      <div class="blog-list">
+        {posts.map((post) => (
+          <a href={post.link} target="_blank" rel="noopener noreferrer" class="blog-item">
+            <span class="blog-date">{post.date}</span>
+            <span class="blog-title serif">{post.title}</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="blog-empty">記事を取得中です。<a href="https://note.com/brewhouse" target="_blank" rel="noopener noreferrer">Note で読む →</a></p>
+    )}
+    <div class="blog-more-wrap">
+      <a href="https://note.com/brewhouse" target="_blank" rel="noopener noreferrer" class="blog-more">
+        すべての記事を Note で読む →
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .blog-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 0 24px;
+    align-items: baseline;
+    padding: 24px 0;
+    border-top: 1px solid #e8ede8;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .blog-item:last-child {
+    border-bottom: 1px solid #e8ede8;
+  }
+  .blog-item:hover {
+    opacity: 0.65;
+  }
+  .blog-date {
+    font-size: 11px;
+    font-weight: 300;
+    color: #9ab09a;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .blog-title {
+    font-size: 14px;
+    font-weight: 300;
+    color: #1a3020;
+    line-height: 1.7;
+  }
+  .blog-more-wrap {
+    margin-top: 36px;
+  }
+  .blog-more {
+    font-size: 12px;
+    font-weight: 300;
+    color: #2d6640;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #c8dac8;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .blog-more:hover {
+    color: #1a3020;
+    border-color: #1a3020;
+  }
+  .blog-empty {
+    font-size: 13px;
+    color: #9ab09a;
+  }
+  .blog-empty a {
+    color: #2d6640;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (max-width: 768px) {
+    .blog-item {
+      grid-template-columns: 1fr;
+      gap: 6px 0;
+    }
+  }
+</style>

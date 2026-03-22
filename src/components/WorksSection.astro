@@ -1,0 +1,75 @@
+---
+import { works } from '../data/works';
+---
+<div class="section-divider"></div>
+<section id="works">
+  <div class="container">
+    <p class="section-tag">WORKS</p>
+    <p class="works-note">クライアント名は非公開です。</p>
+    <div class="works-list">
+      {works.map((work) => (
+        <div class="wc-row">
+          <div class="wc-cat">{work.category}</div>
+          <div class="wc-title">{work.title}</div>
+          <div class="wc-desc">{work.description}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .works-note {
+    font-size: 11px;
+    font-weight: 300;
+    color: #9ab09a;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+  }
+  .works-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .wc-row {
+    display: grid;
+    grid-template-columns: 130px 1.1fr 1.6fr;
+    gap: 0 24px;
+    align-items: baseline;
+    padding: 22px 0;
+    border-top: 1px solid #e8ede8;
+  }
+  .wc-row:last-child {
+    border-bottom: 1px solid #e8ede8;
+  }
+  .wc-cat {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: #2d6640;
+    line-height: 1.8;
+  }
+  .wc-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: #1a3020;
+    line-height: 1.7;
+  }
+  .wc-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: #9ab09a;
+    line-height: 1.8;
+  }
+  @media (max-width: 768px) {
+    .wc-row {
+      grid-template-columns: 1fr;
+      gap: 6px 0;
+      padding: 20px 0;
+    }
+    .wc-cat {
+      margin-bottom: 2px;
+    }
+  }
+</style>
