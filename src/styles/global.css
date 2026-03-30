@@ -14,7 +14,7 @@ html {
 
 body {
   font-family: 'Noto Sans JP', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   background-color: #ffffff;
   color: #1a3020;
   -webkit-font-smoothing: antialiased;
@@ -33,9 +33,9 @@ section {
 .section-tag {
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 10px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.35em;
-  color: #9ab09a;
+  color: #5a7a60;
   margin-bottom: 40px;
 }
 
