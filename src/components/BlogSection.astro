@@ -1,38 +1,49 @@
 ---
 // Fetch Note RSS at build time
 let posts: { date: string; title: string; link: string }[] = [];
-
 try {
   const rssUrl = 'https://note.com/brewhouse/rss';
-  const res = await fetch(rssUrl);
-  if (res.ok) {
+  const res = await fetch(rssUrl, {
+    headers: {
+      // note.com は UA の無いリクエストを弾くことがあるため、ブラウザ相当の UA を付与
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      Accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+    },
+  });
+  if (!res.ok) {
+    console.warn(`Note RSS responded ${res.status} ${res.statusText}`);
+  } else {
     const xml = await res.text();
     // Simple regex-based XML parse (no extra deps needed)
     const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
     posts = items.slice(0, 3).map((m) => {
       const itemXml = m[1];
-      const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
-                         itemXml.match(/<title>(.*?)<\/title>/);
-      const linkMatch = itemXml.match(/<link>(.*?)<\/link>/) ||
-                        itemXml.match(/<guid[^>]*>(.*?)<\/guid>/);
-      const pubDateMatch = itemXml.match(/<pubDate>(.*?)<\/pubDate>/);
-
+      const titleMatch =
+        itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) ||
+        itemXml.match(/<title>([\s\S]*?)<\/title>/);
+      const linkMatch =
+        itemXml.match(/<link>([\s\S]*?)<\/link>/) ||
+        itemXml.match(/<guid[^>]*>([\s\S]*?)<\/guid>/);
+      const pubDateMatch = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
       const title = titleMatch?.[1]?.trim() ?? '';
       const link = linkMatch?.[1]?.trim() ?? 'https://note.com/brewhouse';
       const rawDate = pubDateMatch?.[1]?.trim() ?? '';
       const date = rawDate
-        ? new Date(rawDate).toLocaleDateString('ja-JP', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }).replace(/\//g, '.')
+        ? new Date(rawDate)
+            .toLocaleDateString('ja-JP', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })
+            .replace(/\//g, '.')
         : '';
-
       return { date, title, link };
     });
+    console.log(`Note RSS: parsed ${posts.length} posts`);
   }
 } catch (e) {
-  // RSS fetch failed — show empty (static build: graceful fallback)
+  // RSS fetch failed — show fallback link (static build: graceful fallback)
   console.warn('Note RSS fetch failed:', e);
 }
 ---
@@ -50,7 +61,7 @@ try {
         ))}
       </div>
     ) : (
-      <p class="blog-empty">記事を取得中です。<a href="https://note.com/brewhouse" target="_blank" rel="noopener noreferrer">Note で読む →</a></p>
+      <p class="blog-empty">最新の記事は Note でご覧いただけます。<a href="https://note.com/brewhouse" target="_blank" rel="noopener noreferrer">Note で読む →</a></p>
     )}
     <div class="blog-more-wrap">
       <a href="https://note.com/brewhouse" target="_blank" rel="noopener noreferrer" class="blog-more">
@@ -59,7 +70,6 @@ try {
     </div>
   </div>
 </section>
-
 <style>
   .blog-list {
     display: flex;
