@@ -1,11 +1,21 @@
 ---
 // Fetch Note RSS at build time
 let posts: { date: string; title: string; link: string }[] = [];
+
+// HTML特殊文字（&amp; など）を元の文字に戻す
+const decodeEntities = (s: string) =>
+  s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, '&');
+
 try {
   const rssUrl = 'https://note.com/brewhouse/rss';
   const res = await fetch(rssUrl, {
     headers: {
-      // note.com は UA の無いリクエストを弾くことがあるため、ブラウザ相当の UA を付与
       'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
       Accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
@@ -15,7 +25,6 @@ try {
     console.warn(`Note RSS responded ${res.status} ${res.statusText}`);
   } else {
     const xml = await res.text();
-    // Simple regex-based XML parse (no extra deps needed)
     const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
     posts = items.slice(0, 3).map((m) => {
       const itemXml = m[1];
@@ -26,7 +35,7 @@ try {
         itemXml.match(/<link>([\s\S]*?)<\/link>/) ||
         itemXml.match(/<guid[^>]*>([\s\S]*?)<\/guid>/);
       const pubDateMatch = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
-      const title = titleMatch?.[1]?.trim() ?? '';
+      const title = decodeEntities(titleMatch?.[1]?.trim() ?? '');
       const link = linkMatch?.[1]?.trim() ?? 'https://note.com/brewhouse';
       const rawDate = pubDateMatch?.[1]?.trim() ?? '';
       const date = rawDate
@@ -43,7 +52,6 @@ try {
     console.log(`Note RSS: parsed ${posts.length} posts`);
   }
 } catch (e) {
-  // RSS fetch failed — show fallback link (static build: graceful fallback)
   console.warn('Note RSS fetch failed:', e);
 }
 ---
